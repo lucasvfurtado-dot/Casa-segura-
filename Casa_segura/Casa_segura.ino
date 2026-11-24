@@ -1,0 +1,29 @@
+#include <Servo.h>
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+Servo porta;
+int pir = 8;
+int buzzer = 6;
+int ledVermelho = 13;
+int ledVerde = A3;
+int contraste = A0;
+int botao1 = A1;
+int botao2 = A2;
+int botao3 = A5;
+
+// Senha (botões 1, 3, 2, 1)
+int senha[4] = {1, 3, 2, 1};
+int digitada[4];
+int posicao = 0;
+int erros = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
