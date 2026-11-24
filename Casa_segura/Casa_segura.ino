@@ -55,17 +55,63 @@ int lerBotao() {
   }
   return 0;
 }
-void abrirPorta() {
-  for (int a = 0; a <= 90; a++) {
-    porta.write(a);
-    delay(15);
+void tocarAlarme(int vezes) {
+  for (int i = 0; i < vezes; i++) {
+    tone(buzzer, 3200);
+    delay(120);
+    tone(buzzer, 2400);
+    delay(120);
   }
+  noTone(buzzer);
 }
 
-void fecharPorta() {
-  for (int a = 90; a >= 0; a--) {
-    porta.write(a);
-    delay(15);
+void conferirSenha() {
+  bool certa = true;
+  for (int i = 0; i < 4; i++) {
+    if (digitada[i] != senha[i]) {
+      certa = false;
+    }
+  }
+  posicao = 0;
+
+  if (certa) {
+    erros = 0;
+    lcd.clear();
+    lcd.print("Senha correta!");
+    digitalWrite(ledVermelho, LOW);
+    digitalWrite(ledVerde, HIGH);
+    abrirPorta();
+
+    for (int t = 10; t > 0; t--) {
+      lcd.clear();
+      lcd.print("Sist. DESARMADO");
+      lcd.setCursor(0, 1);
+      lcd.print("Arma em ");
+      lcd.print(t);
+      lcd.print("s");
+      delay(1000);
+    }
+
+    lcd.clear();
+    lcd.print("Armando...");
+    fecharPorta();
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledVermelho, HIGH);
+    delay(3000);   // tempo para sair da frente do sensor
+    telaArmado();
+  } else {
+    erros++;
+    lcd.clear();
+    lcd.print("Senha errada!");
+    if (erros >= 3) {
+      tocarAlarme(12);   // 3 erros: alarme por uns 3 segundos
+      erros = 0;
+    } else {
+      tone(buzzer, 600);
+      delay(1000);
+      noTone(buzzer);
+    }
+    telaArmado();
   }
 }
 void setup() {
