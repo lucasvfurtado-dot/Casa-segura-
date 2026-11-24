@@ -113,6 +113,51 @@ void conferirSenha() {
     }
     telaArmado();
   }
+  void setup() {
+  lcd.begin(16, 2);
+  porta.attach(9);
+
+  pinMode(contraste, OUTPUT);
+  digitalWrite(contraste, LOW);
+
+  pinMode(pir, INPUT);
+  pinMode(buzzer, OUTPUT);
+  pinMode(ledVermelho, OUTPUT);
+  pinMode(ledVerde, OUTPUT);
+  pinMode(botao1, INPUT_PULLUP);
+  pinMode(botao2, INPUT_PULLUP);
+  pinMode(botao3, INPUT_PULLUP);
+
+  porta.write(0);
+  digitalWrite(ledVermelho, HIGH);
+  telaArmado();
+}
+
+void loop() {
+  // Lê os botões da senha
+  int botao = lerBotao();
+  if (botao != 0) {
+    digitada[posicao] = botao;
+    posicao++;
+    mostrarSenha();
+  }
+
+  // Quando digitar os 4 números, confere
+  if (posicao == 4) {
+    conferirSenha();
+  }
+
+  // Sensor de presença: toca o alarme enquanto tiver movimento
+  if (digitalRead(pir) == HIGH) {
+    lcd.clear();
+    lcd.print("ALERTA! Presenca");
+    while (digitalRead(pir) == HIGH) {
+      tocarAlarme(1);
+    }
+    posicao = 0;
+    telaArmado();
+  }
+}
 }
 void setup() {
   // put your setup code here, to run once:
