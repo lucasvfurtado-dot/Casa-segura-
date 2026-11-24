@@ -18,6 +18,26 @@ int digitada[4];
 int posicao = 0;
 int erros = 0;
 
+void telaArmado() {
+  lcd.clear();
+  lcd.print("Sistema ARMADO");
+  lcd.setCursor(0, 1);
+  lcd.print("Digite a senha");
+}
+
+
+void mostrarSenha() {
+  lcd.setCursor(0, 1);
+  lcd.print("Senha: ");
+  for (int i = 0; i < posicao; i++) {
+    lcd.print("*");
+  }
+  for (int i = posicao; i < 4; i++) {
+    lcd.print("_");
+  }
+  lcd.print("     ");
+}
+
 void setup() {
   // put your setup code here, to run once:
 
