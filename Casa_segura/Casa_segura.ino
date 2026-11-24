@@ -37,7 +37,24 @@ void mostrarSenha() {
   }
   lcd.print("     ");
 }
-
+int lerBotao() {
+  if (digitalRead(botao1) == LOW) {
+    delay(50);
+    while (digitalRead(botao1) == LOW) {}
+    return 1;
+  }
+  if (digitalRead(botao2) == LOW) {
+    delay(50);
+    while (digitalRead(botao2) == LOW) {}
+    return 2;
+  }
+  if (digitalRead(botao3) == LOW) {
+    delay(50);
+    while (digitalRead(botao3) == LOW) {}
+    return 3;
+  }
+  return 0;
+}
 void setup() {
   // put your setup code here, to run once:
 
