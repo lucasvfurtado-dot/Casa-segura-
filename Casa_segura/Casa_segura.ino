@@ -55,6 +55,19 @@ int lerBotao() {
   }
   return 0;
 }
+void abrirPorta() {
+  for (int a = 0; a <= 90; a++) {
+    porta.write(a);
+    delay(15);
+  }
+}
+
+void fecharPorta() {
+  for (int a = 90; a >= 0; a--) {
+    porta.write(a);
+    delay(15);
+  }
+}
 void setup() {
   // put your setup code here, to run once:
 
