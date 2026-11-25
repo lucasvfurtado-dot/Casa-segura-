@@ -3,6 +3,8 @@
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 Servo porta;
+
+// Pinos
 int pir = 8;
 int buzzer = 6;
 int ledVermelho = 13;
@@ -25,7 +27,6 @@ void telaArmado() {
   lcd.print("Digite a senha");
 }
 
-
 void mostrarSenha() {
   lcd.setCursor(0, 1);
   lcd.print("Senha: ");
@@ -37,6 +38,7 @@ void mostrarSenha() {
   }
   lcd.print("     ");
 }
+
 int lerBotao() {
   if (digitalRead(botao1) == LOW) {
     delay(50);
@@ -55,6 +57,20 @@ int lerBotao() {
   }
   return 0;
 }
+void abrirPorta() {
+  for (int a = 0; a <= 90; a++) {
+    porta.write(a);
+    delay(15);
+  }
+}
+
+void fecharPorta() {
+  for (int a = 90; a >= 0; a--) {
+    porta.write(a);
+    delay(15);
+  }
+}
+// Som de alarme de casa (dois tons agudos alternando)
 void tocarAlarme(int vezes) {
   for (int i = 0; i < vezes; i++) {
     tone(buzzer, 3200);
@@ -65,6 +81,7 @@ void tocarAlarme(int vezes) {
   noTone(buzzer);
 }
 
+// Confere se a senha digitada está certa
 void conferirSenha() {
   bool certa = true;
   for (int i = 0; i < 4; i++) {
@@ -82,6 +99,7 @@ void conferirSenha() {
     digitalWrite(ledVerde, HIGH);
     abrirPorta();
 
+    // Contagem de 10 segundos com a porta aberta
     for (int t = 10; t > 0; t--) {
       lcd.clear();
       lcd.print("Sist. DESARMADO");
@@ -92,6 +110,7 @@ void conferirSenha() {
       delay(1000);
     }
 
+    // Arma sozinho
     lcd.clear();
     lcd.print("Armando...");
     fecharPorta();
@@ -113,7 +132,9 @@ void conferirSenha() {
     }
     telaArmado();
   }
-  void setup() {
+}
+
+void setup() {
   lcd.begin(16, 2);
   porta.attach(9);
 
@@ -134,7 +155,7 @@ void conferirSenha() {
 }
 
 void loop() {
-  // Lê os botões da senha
+
   int botao = lerBotao();
   if (botao != 0) {
     digitada[posicao] = botao;
@@ -142,12 +163,12 @@ void loop() {
     mostrarSenha();
   }
 
-  // Quando digitar os 4 números, confere
+  
   if (posicao == 4) {
     conferirSenha();
   }
 
-  // Sensor de presença: toca o alarme enquanto tiver movimento
+  
   if (digitalRead(pir) == HIGH) {
     lcd.clear();
     lcd.print("ALERTA! Presenca");
@@ -157,14 +178,4 @@ void loop() {
     posicao = 0;
     telaArmado();
   }
-}
-}
-void setup() {
-  // put your setup code here, to run once:
-
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
 }
